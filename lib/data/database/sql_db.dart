@@ -2,15 +2,15 @@ import 'package:logger/logger.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class Initializing {
-  Initializing._internal();
-  static final Initializing _instance = Initializing._internal();
-  factory Initializing() => _instance;
+class InitializingDB {
+  InitializingDB._internal();
+  static final InitializingDB _instance = InitializingDB._internal();
+  factory InitializingDB() => _instance;
+  late Database database;
 
 //==================================== initializing DB
   Future<Database?> initializeDB() async {
     String dbName = 'lift-pro.db';
-    Database database;
     try {
       final p = await getDatabasesPath();
       String path = join(p, dbName);
@@ -36,7 +36,7 @@ class Initializing {
     try {
       await db.execute("""CREATE TABLE IF NOT EXISTS $tableName (
     "set_id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "set_name" VARCHAR(50) NOT NULL );""");
+    "set_name" VARCHAR(50) NOT NULL UNIQUE );""");
       Logger().i("TABLE CREATED SUCCESS");
     } catch (e) {
       Logger().e("Failed to create table - ${e.toString()}");
@@ -50,9 +50,9 @@ class Initializing {
     try {
       int id = await db.rawInsert(
           '''INSERT INTO $tableName (set_name) VALUES (?)''', [name]);
-      Logger().i("Data adding success - $id");
+    //  Logger().i("Data adding success - $id");
     } catch (e) {
-      Logger().e("Data adding failed - ${e.toString()}");
+    //  Logger().e("Data adding failed - ${e.toString()}");
     }
   }
 
@@ -80,7 +80,7 @@ class Initializing {
       List<Map<String, dynamic>> listOfMaps = await db.rawQuery(
           '''SELECT * FROM $tableName WHERE $columnName LIKE '%$keyWord%' ''');
 
-      Logger().i("Data Searching success - ${listOfMaps.toString()}");
+      //Logger().i("Data Searching success - ${listOfMaps.toString()}");
       return listOfMaps;
     } catch (e) {
       Logger().e("Data Searching failed - ${e.toString()}");

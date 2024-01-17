@@ -31,6 +31,11 @@ class BottomForm extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    onChanged: (value) async {
+                      if (value.length > 2) {
+                        await _controller.searchingScheduleSets(value);
+                      }
+                    },
                   ),
                 ),
                 Obx(
@@ -65,7 +70,7 @@ class BottomForm extends StatelessWidget {
                                   tShowWarning("Empty set Name");
                                   return;
                                 }
-                                _controller.saveItem();
+
                                 _controller.setName.clear();
                                 _controller.scrollController.animateTo(
                                   _controller.scrollController.position
@@ -85,9 +90,9 @@ class BottomForm extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: () async {
-              //  await LiftProDB().insertToSets("BBBB");
+                //  await LiftProDB().insertToSets("BBBB");
                 Logger().f("SUCCESS");
-              //  await LiftProDB().fetchAll();
+                //  await LiftProDB().fetchAll();
               },
               child: Container(
                 margin: EdgeInsets.symmetric(

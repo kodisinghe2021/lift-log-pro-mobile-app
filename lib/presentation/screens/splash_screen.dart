@@ -8,23 +8,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    // Future.delayed(
-    //   const Duration(milliseconds: 100),
-    //   () => Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => const HomeHook(),
-    //     )
-    //   ),
-    // );
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Text("Splash Screen"),
       ),

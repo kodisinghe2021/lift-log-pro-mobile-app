@@ -12,9 +12,7 @@ final class InitializingSuccessState extends InitializingState {
 
 final class InitializingFailedState extends InitializingState {}
 
-final class InitializeRetrievingSuccessState extends InitializingState {
-  InitializeRetrievingSuccessState({required this.scheduleModelList});
-  final List<ScheduleModel> scheduleModelList;
+final class InitializeInsertingSuccessState extends InitializingState {
 }
 
 final class InitializeRetrievingFailedState extends InitializingState {}

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:liftlogpro_app/data/database/sql_db.dart';
 import 'package:liftlogpro_app/model/schedule_model.dart';
 import 'package:liftlogpro_app/presentation/widgets/toast_message.dart';
 import 'package:liftlogpro_app/utils/constants/colors.dart';
 import 'package:liftlogpro_app/utils/constants/diamentions.dart';
 import 'package:logger/logger.dart';
+import 'package:sqflite/sqflite.dart';
 
-part 'controller.dart';
+part '../../../../logic/controllers/schedule_screen_controller.dart';
 part 'widgets.dart';
 
 class ScheduleScreen extends StatelessWidget {
