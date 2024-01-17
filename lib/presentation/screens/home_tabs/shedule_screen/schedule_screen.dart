@@ -33,7 +33,7 @@ class ScheduleScreen extends StatelessWidget {
                   shrinkWrap: true,
                   reverse: true,
                   controller: _controller.scrollController,
-                  itemCount: _controller.scheduledSetsList.value.length,
+                  itemCount: _controller.scheduledSetsList.length,
                   itemBuilder: (context, index) => ListTile(
                     onTap: () {
                       // _controller.setName.text = _controller

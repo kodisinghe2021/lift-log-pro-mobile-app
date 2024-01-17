@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:liftlogpro_app/data/database/sql_db.dart';
-import 'package:logger/logger.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,8 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const Center(
+    return const Scaffold(
+      body: Center(
         child: Text("Splash Screen"),
       ),
       // floatingActionButton: FloatingActionButton(

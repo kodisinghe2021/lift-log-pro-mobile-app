@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:liftlogpro_app/logic/providers/schedule_provider.dart';
 import 'package:liftlogpro_app/presentation/screens/home_tabs/home_screen.dart';
 import 'package:liftlogpro_app/presentation/screens/home_tabs/shedule_screen/schedule_screen.dart';
 import 'package:liftlogpro_app/presentation/screens/home_tabs/workouts.dart';
-import 'package:provider/provider.dart';
 
 class HomeHook extends StatefulWidget {
   const HomeHook({super.key});
