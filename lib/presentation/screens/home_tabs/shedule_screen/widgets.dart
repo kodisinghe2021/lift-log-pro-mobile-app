@@ -10,118 +10,222 @@ class BottomForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double defaultFontSize =
+        MediaQuery.of(context).textScaleFactor * 14.0 * 1.3;
     return SizedBox(
-      height: h(context) * .14,
+      // height: h(context) * .4,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Expanded(
-            child: Row(
+          Obx(
+            () => _controller.searchedSSList.isNotEmpty
+                ? Expanded(
+                    child: Container(
+                      color: Colors.white,
+                      child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              _controller.setNewScheduleModel(
+                                  _controller.searchedSSList[index]);
+                              _controller.setName.text =
+                                  _controller.searchedSSList[index].setName;
+                              _controller.searchedSSList.clear();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 20,
+                              ),
+                              child: Text(
+                                "${_controller.searchedSSList[index].setId.toString()} : ${_controller.searchedSSList[index].setName.toString()}",
+                                style: GoogleFonts.roboto(
+                                  fontSize: defaultFontSize,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const Divider();
+                        },
+                        itemCount: _controller.searchedSSList.length,
+                        shrinkWrap: true,
+                        reverse: true,
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+          ),
+          SizedBox(
+            height: h(context) * .14,
+            child: Column(
               children: [
                 Expanded(
-                  flex: 4,
-                  child: TextFormField(
-                    controller: _controller.setName,
-                    decoration: InputDecoration(
-                      hintText: "Enter your set name",
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: kLightRed,
-                          width: 1,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: TextFormField(
+                          controller: _controller.setName,
+                          decoration: InputDecoration(
+                            hintText: "Enter your set name",
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: kLightRed,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onChanged: (value) async {
+                            if (value.isNotEmpty) {
+                              await _controller.searchingScheduleSets(value);
+                            }
+                            if (value.isEmpty) {
+                              _controller.searchedSSList.clear();
+                            }
+                          },
                         ),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                    onChanged: (value) async {
-                      if (value.length > 2) {
-                        await _controller.searchingScheduleSets(value);
-                      }
-                    },
+                      Obx(
+                        () => Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 6),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                width: 3,
+                                color: kLightRed,
+                              ),
+                            ),
+                            child: _controller.isUpdate.value
+                                ? IconButton(
+                                    padding: const EdgeInsets.all(5),
+                                    onPressed: () {
+                                      if (_controller.setName.text.isEmpty) {
+                                        tShowWarning("Empty set Name");
+                                        return;
+                                      }
+                                      _controller.setName.clear();
+                                    },
+                                    icon: const Icon(Icons.upload),
+                                  )
+                                : IconButton(
+                                    padding: const EdgeInsets.all(5),
+                                    onPressed: () {
+                                      if (_controller.setName.text.isEmpty) {
+                                        tShowWarning("Empty set Name");
+                                        return;
+                                      }
+                                      if (_controller.isSetSelected.value ==
+                                          false) {
+                                        tShowWarning(
+                                            "Choose name from the list");
+                                      }
+                                      for (var i = 0;
+                                          i < _controller.addedSSList.length;
+                                          i++) {
+                                        if (_controller
+                                                .addedSSList[i].setName ==
+                                            _controller.setName.text) {
+                                          _controller.setName.clear();
+                                          tShowWarning("Already in the list");
+                                          return;
+                                        }
+                                      }
+                                      _controller.addToSchedule(
+                                          _controller.getNewScheduleModel);
+
+                                      _controller.setName.clear();
+                                      _controller.scrollController.animateTo(
+                                        _controller.scrollController.position
+                                            .maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.fastOutSlowIn,
+                                      );
+                                    },
+                                    icon: const Icon(Icons.skip_next_rounded),
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Obx(
-                  () => Expanded(
-                    flex: 1,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          width: 3,
-                          color: kLightRed,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            _controller.addedSSList.clear();
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: w(context) * .1,
+                              vertical: h(context) * .005,
+                            ),
+                            decoration: BoxDecoration(
+                              color: kLightRed.withOpacity(.9),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Clear",
+                                style: TextStyle(
+                                  fontFamily: 'Roboto-bold',
+                                  fontSize: 16,
+                                  color: kWhite,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      child: _controller.isUpdate.value
-                          ? IconButton(
-                              padding: const EdgeInsets.all(5),
-                              onPressed: () {
-                                if (_controller.setName.text.isEmpty) {
-                                  tShowWarning("Empty set Name");
-                                  return;
-                                }
-                                _controller.setName.clear();
-                              },
-                              icon: const Icon(Icons.upload),
-                            )
-                          : IconButton(
-                              padding: const EdgeInsets.all(5),
-                              onPressed: () {
-                                if (_controller.setName.text.isEmpty) {
-                                  tShowWarning("Empty set Name");
-                                  return;
-                                }
-
-                                _controller.setName.clear();
-                                _controller.scrollController.animateTo(
-                                  _controller.scrollController.position
-                                      .maxScrollExtent,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                );
-                              },
-                              icon: const Icon(Icons.skip_next_rounded),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () async {
+                            //  await LiftProDB().insertToSets("BBBB");
+                            //  Logger().f("SUCCESS");
+                            //  await LiftProDB().fetchAll();
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: w(context) * .1,
+                              vertical: h(context) * .005,
                             ),
-                    ),
+                            decoration: BoxDecoration(
+                              color: kLightRed,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Save",
+                                style: TextStyle(
+                                  fontFamily: 'Roboto-bold',
+                                  fontSize: 16,
+                                  color: kWhite,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () async {
-                //  await LiftProDB().insertToSets("BBBB");
-                Logger().f("SUCCESS");
-                //  await LiftProDB().fetchAll();
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: w(context) * .15,
-                  vertical: h(context) * .005,
-                ),
-                // height: h(context) * .06,
-                // width: w(context) * .4,
-                decoration: BoxDecoration(
-                  color: kLightRed,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(
-                    "Save",
-                    style: TextStyle(
-                      fontFamily: 'Roboto-bold',
-                      fontSize: 16,
-                      color: kWhite,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            //child: BottomForm(),
+            //  child: BottomForm(),
           ),
         ],
       ),
-      //child: BottomForm(),
-      //  child: BottomForm(),
     );
   }
 }

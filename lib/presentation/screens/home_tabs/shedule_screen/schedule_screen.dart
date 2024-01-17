@@ -35,7 +35,7 @@ class ScheduleScreen extends StatelessWidget {
                   shrinkWrap: true,
                   reverse: true,
                   controller: _controller.scrollController,
-                  itemCount: _controller.scheduledSetsList.length,
+                  itemCount: _controller.addedSSList.length,
                   itemBuilder: (context, index) => ListTile(
                     onTap: () {
                       // _controller.setName.text = _controller
@@ -51,7 +51,8 @@ class ScheduleScreen extends StatelessWidget {
                         color: kLightRed,
                       ),
                     ),
-                    title: Text("",
+                    title: Text(
+                      _controller.addedSSList[index].setName.toString(),
                       // _controller.scheduledSetsList.value[index].name
                       //     .toString(),
                       style: GoogleFonts.roboto(
@@ -74,10 +75,8 @@ class ScheduleScreen extends StatelessWidget {
                 child: const DaySelector(),
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
+            Align(
+              alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: BottomForm(controller: _controller),
